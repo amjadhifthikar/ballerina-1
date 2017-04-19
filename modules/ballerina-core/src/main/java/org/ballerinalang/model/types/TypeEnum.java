@@ -37,7 +37,9 @@ public enum TypeEnum {
     DATATABLE("datatable"),
     STRUCT("struct"),
     EMPTY(""),
-    ANY("any");
+    ANY("any"),
+    FILE("file"),
+    INPUTSTREAM("inputstream");
 
     private String name;
 
