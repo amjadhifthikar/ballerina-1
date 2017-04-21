@@ -43,5 +43,6 @@ public class TypeConstants {
     public static final String NULL_TNAME = "null";
     public static final String FILE_TNAME = "file";
     public static final String INPUTSTREAM_TNAME = "inputstream";
+    public static final String READER_TNAME = "reader";
 }
 
