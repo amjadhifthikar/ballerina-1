@@ -19,7 +19,8 @@ package org.ballerinalang.nativeimpl.lang.io;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.impl.StandardFileSystemManager;
+import org.apache.commons.vfs2.FileSystemManager;
+import org.apache.commons.vfs2.VFS;
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.model.types.TypeEnum;
 import org.ballerinalang.model.values.BFile;
@@ -38,16 +39,16 @@ import org.ballerinalang.util.exceptions.BallerinaException;
  */
 @BallerinaFunction(
         packageName = "ballerina.lang.io",
-        functionName = "readByte",
-        args = {@Argument(name = "in", type = TypeEnum.FILE)},
+        functionName = "getInputStream",
+        args = {@Argument(name = "file", type = TypeEnum.FILE)},
         returnType = {@ReturnType(type = TypeEnum.INPUTSTREAM)},
         isPublic = true
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
         value = "Gets the inputstream from file") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "m",
+@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "file",
         value = "The BFile reference") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "int",
+@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "is",
         value = "The inputstream of file") })
 public class GetInputStream extends AbstractNativeFunction {
 
@@ -55,7 +56,7 @@ public class GetInputStream extends AbstractNativeFunction {
         BInputStream result;
         BFile file = (BFile) getArgument(context, 0);
         try {
-            StandardFileSystemManager fsm = new StandardFileSystemManager();
+            FileSystemManager fsm = VFS.getManager();
             FileObject fileObject = fsm.resolveFile(file.stringValue());
             result = new BInputStream(fileObject.getContent().getInputStream());
         }  catch (FileSystemException e) {

@@ -19,8 +19,8 @@ package org.ballerinalang.nativeimpl.lang.io;
 
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.model.types.TypeEnum;
-import org.ballerinalang.model.values.BInputStream;
-import org.ballerinalang.model.values.BInteger;
+import org.ballerinalang.model.values.BFile;
+import org.ballerinalang.model.values.BMessage;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.Argument;
@@ -29,33 +29,33 @@ import org.ballerinalang.natives.annotations.BallerinaAnnotation;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.ReturnType;
 import org.ballerinalang.util.exceptions.BallerinaException;
-import java.io.IOException;
+import org.wso2.carbon.messaging.FileCarbonMessage;
 
 /**
- * Get the next byte in an inputstream.
+ * Gets the file from FileCarbonMessage.
  */
 @BallerinaFunction(
         packageName = "ballerina.lang.io",
-        functionName = "readByte",
-        args = {@Argument(name = "in", type = TypeEnum.INPUTSTREAM)},
-        returnType = {@ReturnType(type = TypeEnum.INT)},
+        functionName = "getFileFromMessage",
+        args = {@Argument(name = "m", type = TypeEnum.MESSAGE)},
+        returnType = {@ReturnType(type = TypeEnum.FILE)},
         isPublic = true
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
-        value = "Gets the next byte from inputstream") })
+        value = "Gets the file from FileCarbonMessage") })
 @BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "m",
-        value = "The message object") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "int",
-        value = "The int value of next byte") })
-public class ReadByte extends AbstractNativeFunction {
+        value = "A FileCarbonMessage instance") })
+@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "file",
+        value = "The BFile object representing file in message") })
+public class GetFileFromMessage extends AbstractNativeFunction {
 
     @Override public BValue[] execute(Context context) {
-        BInteger result;
-        BInputStream inputStream = (BInputStream) getArgument(context, 0);
-        try {
-            result = new BInteger(inputStream.read());
-        } catch (IOException e) {
-            throw new BallerinaException("Error occurred while reading input stream", e);
+        BFile result;
+        BMessage msg = (BMessage) getArgument(context, 0);
+        if (msg.value() instanceof FileCarbonMessage) {
+            result = new BFile(((FileCarbonMessage) msg.value()).getFilePath());
+        } else {
+            throw new BallerinaException("File can be created only from FileCarbonMessage");
         }
         return getBValues(result);
     }
