@@ -69,9 +69,9 @@ public class FileServiceDispatcher implements ServiceDispatcher {
                         Collectors.toMap(Entry::getKey, entry -> entry.getValue().getLiteralValue().stringValue()));
                 String serviceName = service.getSymbolName().getName();
                 ServerConnector fileServerConnector = BallerinaConnectorManager.getInstance().createServerConnector(
-                        Constants.PROTOCOL_FILE, serviceName);
+                        Constants.PROTOCOL_FILE, serviceName, elementsMap);
                 try {
-                    fileServerConnector.start(elementsMap);
+                    fileServerConnector.start();
                     servicesMap.put(serviceName, service);
                 } catch (ServerConnectorException e) {
                     throw new BallerinaException("Could not start File Server Connector for service: " + serviceName,

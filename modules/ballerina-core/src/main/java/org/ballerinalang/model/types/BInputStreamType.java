@@ -36,11 +36,13 @@ public class BInputStreamType extends BType {
         super(typeName, pkgPath, symbolScope, valueClass);
     }
 
-    @Override public <V extends BValue> V getZeroValue() {
+    @Override
+    public <V extends BValue> V getZeroValue() {
         return null;
     }
 
-    @Override public <V extends BValue> V getEmptyValue() {
+    @Override
+    public <V extends BValue> V getEmptyValue() {
         return null;
     }
 }

@@ -1,4 +1,4 @@
-package org.ballerinalang.nativeimpl.lang.io;/*
+/*
  * Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
@@ -15,6 +15,7 @@ package org.ballerinalang.nativeimpl.lang.io;/*
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.ballerinalang.nativeimpl.lang.io;
 
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.model.types.TypeEnum;
@@ -49,7 +50,8 @@ import java.io.IOException;
         value = "The next line read from the reader") })
 public class ReadLine extends AbstractNativeFunction {
 
-    @Override public BValue[] execute(Context context) {
+    @Override
+    public BValue[] execute(Context context) {
         BString result;
         BReader reader = (BReader) getArgument(context, 0);
         try {
