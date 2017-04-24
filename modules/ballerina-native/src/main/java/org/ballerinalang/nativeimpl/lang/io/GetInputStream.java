@@ -35,7 +35,7 @@ import org.ballerinalang.natives.annotations.ReturnType;
 import org.ballerinalang.util.exceptions.BallerinaException;
 
 /**
- * Get the next byte in an inputstream.
+ * Gets the inputstream from file.
  */
 @BallerinaFunction(
         packageName = "ballerina.lang.io",
@@ -52,7 +52,8 @@ import org.ballerinalang.util.exceptions.BallerinaException;
         value = "The inputstream of file") })
 public class GetInputStream extends AbstractNativeFunction {
 
-    @Override public BValue[] execute(Context context) {
+    @Override
+    public BValue[] execute(Context context) {
         BInputStream result;
         BFile file = (BFile) getArgument(context, 0);
         try {

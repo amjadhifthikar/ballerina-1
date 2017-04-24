@@ -49,7 +49,8 @@ import org.wso2.carbon.messaging.FileCarbonMessage;
         value = "The BFile object representing file in message") })
 public class GetFileFromMessage extends AbstractNativeFunction {
 
-    @Override public BValue[] execute(Context context) {
+    @Override
+    public BValue[] execute(Context context) {
         BFile result;
         BMessage msg = (BMessage) getArgument(context, 0);
         if (msg.value() instanceof FileCarbonMessage) {
