@@ -1,4 +1,4 @@
-package org.ballerinalang.nativeimpl.io;
+package org.ballerinalang.nativeimpl.lang.io;
 
 import org.apache.commons.vfs2.FileObject;
 import org.apache.commons.vfs2.FileSystemException;
@@ -6,7 +6,7 @@ import org.apache.commons.vfs2.FileSystemManager;
 import org.apache.commons.vfs2.VFS;
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.model.types.TypeEnum;
-import org.ballerinalang.model.values.BString;
+import org.ballerinalang.model.values.BFile;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.Argument;
@@ -21,9 +21,9 @@ import org.slf4j.LoggerFactory;
  * Copy Function
  */
 @BallerinaFunction(
-        packageName = "ballerina.io",
+        packageName = "ballerina.lang.io",
         functionName = "delete",
-        args = {@Argument(name = "target", type = TypeEnum.STRING)},
+        args = {@Argument(name = "target", type = TypeEnum.FILE)},
         isPublic = true
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
@@ -35,7 +35,7 @@ public class Delete extends AbstractNativeFunction {
     private static final Logger log = LoggerFactory.getLogger(Delete.class);
     @Override public BValue[] execute(Context context) {
 
-        BString target = (BString) getArgument(context, 0);
+        BFile target = (BFile) getArgument(context, 0);
 
         try {
             FileSystemManager fsManager = VFS.getManager();
