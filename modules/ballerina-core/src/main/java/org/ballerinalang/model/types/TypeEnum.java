@@ -39,7 +39,8 @@ public enum TypeEnum {
     EMPTY(""),
     ANY("any"),
     FILE("file"),
-    INPUTSTREAM("inputstream");
+    INPUTSTREAM("inputstream"),
+    READER("reader");
 
     private String name;
 

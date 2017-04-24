@@ -31,7 +31,6 @@ import org.ballerinalang.util.exceptions.BallerinaException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.wso2.carbon.messaging.CarbonMessage;
-import org.wso2.carbon.messaging.StreamingCarbonMessage;
 
 /**
  * Function to acknowledge that file processing is done.
@@ -40,7 +39,7 @@ import org.wso2.carbon.messaging.StreamingCarbonMessage;
  * saying that the message processing is done.
  *
  * What happens under the hood:
- * As the received {@link StreamingCarbonMessage} carries
+ * As the received {@link CarbonMessage} carries
  * a reference to a file {@link java.io.InputStream}, once acknowledged,
  * the message sender will close the file input stream.
  *
@@ -71,14 +70,7 @@ public class Acknowledge extends AbstractNativeFunction {
         try {
             msg = (BMessage) getArgument(context, 0);
             cMsg = msg.value();
-
-            if (cMsg instanceof StreamingCarbonMessage) {
-                context.getBalCallback().done(cMsg);
-            } else {
-                throw new BallerinaException("Invalid message type received. " +
-                        "Required: " + StreamingCarbonMessage.class.getCanonicalName() +
-                        ". Found: " + cMsg.getClass().getCanonicalName());
-            }
+            context.getBalCallback().done(cMsg);
 
             if (log.isDebugEnabled()) {
                 log.debug("Acknowledged file: " + cMsg.getHeader(FILE_NAME));
