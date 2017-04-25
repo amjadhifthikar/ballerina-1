@@ -54,10 +54,16 @@ public class ReadLine extends AbstractNativeFunction {
     public BValue[] execute(Context context) {
         BString result;
         BReader reader = (BReader) getArgument(context, 0);
+        String line;
         try {
-            result = new BString(reader.readLine());
+            line = reader.readLine();
         } catch (IOException e) {
             throw new BallerinaException("Exception occurred when reading line", e);
+        }
+        if (line != null) {
+            result = new BString(line);
+        } else {
+            result = new BString("");
         }
         return getBValues(result);
     }
