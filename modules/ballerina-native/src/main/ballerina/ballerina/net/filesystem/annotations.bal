@@ -1,4 +1,4 @@
-package ballerina.net.file;
+package ballerina.net.filesystem;
 
 annotation FileSource attach service {
     string protocol;

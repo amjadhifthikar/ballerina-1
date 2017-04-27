@@ -47,7 +47,7 @@ public class FileServiceTest {
 //    public void testServiceAvailabilityWithoutServiceName() {
 //        try {
 //            CarbonMessage cMsg = new StreamingCarbonMessage(null);
-//            cMsg.setProperty(org.wso2.carbon.messaging.Constants.PROTOCOL, Constants.PROTOCOL_FILE);
+//            cMsg.setProperty(org.wso2.carbon.messaging.Constants.PROTOCOL, Constants.PROTOCOL_FILE_SYSTEM);
 //            ServerConnectorMessageHandler.handleInbound(cMsg, new TestCallback());
 //            Assert.fail("Expectation is not thrown when the service name is not provided in the file streaming "
 //                    + "message");
@@ -62,7 +62,7 @@ public class FileServiceTest {
 //    public void testServiceAvailabilityWithWrongServiceName() {
 //        try {
 //            CarbonMessage cMsg = new StreamingCarbonMessage(null);
-//            cMsg.setProperty(org.wso2.carbon.messaging.Constants.PROTOCOL, Constants.PROTOCOL_FILE);
+//            cMsg.setProperty(org.wso2.carbon.messaging.Constants.PROTOCOL, Constants.PROTOCOL_FILE_SYSTEM);
 //            cMsg.setProperty(Constants.TRANSPORT_PROPERTY_SERVICE_NAME, "abc");
 //            ServerConnectorMessageHandler.handleInbound(cMsg, new TestCallback());
 //            Assert.fail("Expectation is not thrown when a wrong service name is not provided in the file streaming "
