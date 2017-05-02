@@ -15,34 +15,33 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.ballerinalang.model.types;
+package org.ballerinalang.model.values;
 
-import org.ballerinalang.model.SymbolScope;
-import org.ballerinalang.model.values.BFile;
-import org.ballerinalang.model.values.BValue;
+import org.ballerinalang.model.types.BType;
 
 /**
- * {@code BFileType} represents a File in Ballerina.
+ * The {@code BBlob} represents a byte array.
+ * {@link BBlob} will be useful for storing byte values.
  *
  * @since 0.9.0
  */
-public class BFileType extends BType {
+public class BBlob implements BRefType<byte[]> {
 
-    protected BFileType(SymbolScope symbolScope) {
-        super(symbolScope);
+    private byte[] value;
+
+    public BBlob(byte[] value) {
+        this.value = value;
     }
 
-    protected BFileType(String typeName, String pkgPath, SymbolScope symbolScope) {
-        super(typeName, pkgPath, symbolScope, BFile.class);
+    @Override public byte[] value() {
+        return value;
     }
 
-    @Override
-    public <V extends BValue> V getZeroValue() {
+    @Override public String stringValue() {
         return null;
     }
 
-    @Override
-    public <V extends BValue> V getEmptyValue() {
+    @Override public BType getType() {
         return null;
     }
 }

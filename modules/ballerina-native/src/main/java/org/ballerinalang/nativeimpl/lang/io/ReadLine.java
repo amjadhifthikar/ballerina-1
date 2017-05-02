@@ -17,14 +17,10 @@
  */
 package org.ballerinalang.nativeimpl.lang.io;
 
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.FileSystemManager;
-import org.apache.commons.vfs2.VFS;
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.model.types.TypeEnum;
-import org.ballerinalang.model.values.BFile;
-import org.ballerinalang.model.values.BInputStream;
+import org.ballerinalang.model.values.BReader;
+import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.Argument;
@@ -34,34 +30,40 @@ import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.ReturnType;
 import org.ballerinalang.util.exceptions.BallerinaException;
 
+import java.io.IOException;
+
 /**
- * Gets the inputstream from file.
+ * Get the next line in a reader.
  */
 @BallerinaFunction(
         packageName = "ballerina.lang.io",
-        functionName = "getInputStream",
-        args = {@Argument(name = "file", type = TypeEnum.FILE)},
-        returnType = {@ReturnType(type = TypeEnum.INPUTSTREAM)},
+        functionName = "readLine",
+        args = {@Argument(name = "reader", type = TypeEnum.READER)},
+        returnType = {@ReturnType(type = TypeEnum.STRING)},
         isPublic = true
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
-        value = "Gets the inputstream from file") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "file",
-        value = "The BFile reference") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "is",
-        value = "The inputstream of file") })
-public class GetInputStream extends AbstractNativeFunction {
+        value = "Gets the next line from reader") })
+@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "reader",
+        value = "The reader to read the next line from") })
+@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "line",
+        value = "The next line read from the reader") })
+public class ReadLine extends AbstractNativeFunction {
 
     @Override
     public BValue[] execute(Context context) {
-        BInputStream result;
-        BFile file = (BFile) getArgument(context, 0);
+        BString result;
+        BReader reader = (BReader) getArgument(context, 0);
+        String line;
         try {
-            FileSystemManager fsm = VFS.getManager();
-            FileObject fileObject = fsm.resolveFile(file.stringValue());
-            result = new BInputStream(fileObject.getContent().getInputStream());
-        }  catch (FileSystemException e) {
-            throw new BallerinaException("Error occurred while getting input stream", e);
+            line = reader.readLine();
+        } catch (IOException e) {
+            throw new BallerinaException("Exception occurred when reading line", e);
+        }
+        if (line != null) {
+            result = new BString(line);
+        } else {
+            result = new BString("");
         }
         return getBValues(result);
     }

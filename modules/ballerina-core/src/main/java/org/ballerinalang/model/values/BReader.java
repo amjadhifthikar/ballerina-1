@@ -1,4 +1,4 @@
-package org.ballerinalang.model.values;/*
+/*
  * Copyright (c) 2017, WSO2 Inc. (http://www.wso2.org) All Rights Reserved.
  *
  * WSO2 Inc. licenses this file to you under the Apache License,
@@ -15,6 +15,7 @@ package org.ballerinalang.model.values;/*
  * specific language governing permissions and limitations
  * under the License.
  */
+package org.ballerinalang.model.values;
 
 import org.ballerinalang.model.types.BType;
 import org.ballerinalang.model.types.BTypes;

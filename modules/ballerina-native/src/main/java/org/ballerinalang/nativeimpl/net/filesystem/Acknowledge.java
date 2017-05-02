@@ -16,7 +16,7 @@
  * under the License.
  */
 
-package org.ballerinalang.nativeimpl.net.file;
+package org.ballerinalang.nativeimpl.net.filesystem;
 
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.model.types.TypeEnum;
@@ -49,7 +49,7 @@ import org.wso2.carbon.messaging.CarbonMessage;
  * ballerina.net.file:acknowledge
  */
 @BallerinaFunction(
-        packageName = "ballerina.net.file",
+        packageName = "ballerina.net.filesystem",
         functionName = "acknowledge",
         args = {@Argument(name = "m", type = TypeEnum.MESSAGE)},
         isPublic = true

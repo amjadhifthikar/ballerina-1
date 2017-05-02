@@ -30,7 +30,7 @@ import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.ReturnType;
 
 /**
- * Gets the file from FileCarbonMessage.
+ * Gets the file from path string.
  */
 @BallerinaFunction(
         packageName = "ballerina.lang.io",
@@ -47,7 +47,8 @@ import org.ballerinalang.natives.annotations.ReturnType;
         value = "The BFile object representing file in path") })
 public class GetFileFromPath extends AbstractNativeFunction {
 
-    @Override public BValue[] execute(Context context) {
+    @Override
+    public BValue[] execute(Context context) {
         BFile result;
         BString path = (BString) getArgument(context, 0);
         result = new BFile(path.stringValue());

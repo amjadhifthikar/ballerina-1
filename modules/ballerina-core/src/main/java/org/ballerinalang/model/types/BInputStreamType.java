@@ -18,6 +18,7 @@
 package org.ballerinalang.model.types;
 
 import org.ballerinalang.model.SymbolScope;
+import org.ballerinalang.model.values.BInputStream;
 import org.ballerinalang.model.values.BValue;
 
 /**
@@ -31,16 +32,17 @@ public class BInputStreamType extends BType {
         super(symbolScope);
     }
 
-    protected BInputStreamType(String typeName, String pkgPath, SymbolScope symbolScope,
-                               Class<? extends BValue> valueClass) {
-        super(typeName, pkgPath, symbolScope, valueClass);
+    protected BInputStreamType(String typeName, String pkgPath, SymbolScope symbolScope) {
+        super(typeName, pkgPath, symbolScope, BInputStream.class);
     }
 
-    @Override public <V extends BValue> V getZeroValue() {
+    @Override
+    public <V extends BValue> V getZeroValue() {
         return null;
     }
 
-    @Override public <V extends BValue> V getEmptyValue() {
+    @Override
+    public <V extends BValue> V getEmptyValue() {
         return null;
     }
 }

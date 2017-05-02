@@ -37,19 +37,20 @@ import java.io.IOException;
 @BallerinaFunction(
         packageName = "ballerina.lang.io",
         functionName = "readByte",
-        args = {@Argument(name = "in", type = TypeEnum.INPUTSTREAM)},
+        args = {@Argument(name = "is", type = TypeEnum.INPUTSTREAM)},
         returnType = {@ReturnType(type = TypeEnum.INT)},
         isPublic = true
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
         value = "Gets the next byte from inputstream") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "m",
-        value = "The message object") })
+@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "is",
+        value = "The inputstream to read next byte from") })
 @BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "int",
         value = "The int value of next byte") })
 public class ReadByte extends AbstractNativeFunction {
 
-    @Override public BValue[] execute(Context context) {
+    @Override
+    public BValue[] execute(Context context) {
         BInteger result;
         BInputStream inputStream = (BInputStream) getArgument(context, 0);
         try {

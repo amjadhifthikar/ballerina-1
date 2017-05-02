@@ -17,13 +17,8 @@
  */
 package org.ballerinalang.nativeimpl.lang.io;
 
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.FileSystemManager;
-import org.apache.commons.vfs2.VFS;
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.model.types.TypeEnum;
-import org.ballerinalang.model.values.BFile;
 import org.ballerinalang.model.values.BInputStream;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.natives.AbstractNativeFunction;
@@ -31,38 +26,33 @@ import org.ballerinalang.natives.annotations.Argument;
 import org.ballerinalang.natives.annotations.Attribute;
 import org.ballerinalang.natives.annotations.BallerinaAnnotation;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
-import org.ballerinalang.natives.annotations.ReturnType;
 import org.ballerinalang.util.exceptions.BallerinaException;
 
+import java.io.IOException;
+
 /**
- * Gets the inputstream from file.
+ * Can be used to close an inputstream.
  */
 @BallerinaFunction(
         packageName = "ballerina.lang.io",
-        functionName = "getInputStream",
-        args = {@Argument(name = "file", type = TypeEnum.FILE)},
-        returnType = {@ReturnType(type = TypeEnum.INPUTSTREAM)},
+        functionName = "closeInputStream",
+        args = {@Argument(name = "is", type = TypeEnum.INPUTSTREAM)},
         isPublic = true
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
-        value = "Gets the inputstream from file") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "file",
-        value = "The BFile reference") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "is",
-        value = "The inputstream of file") })
-public class GetInputStream extends AbstractNativeFunction {
+        value = "Closes a given inputstream") })
+@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "is",
+        value = "The inputstream to be closed") })
+public class CloseInputStream extends AbstractNativeFunction {
 
     @Override
     public BValue[] execute(Context context) {
-        BInputStream result;
-        BFile file = (BFile) getArgument(context, 0);
+        BInputStream inputStream = (BInputStream) getArgument(context, 0);
         try {
-            FileSystemManager fsm = VFS.getManager();
-            FileObject fileObject = fsm.resolveFile(file.stringValue());
-            result = new BInputStream(fileObject.getContent().getInputStream());
-        }  catch (FileSystemException e) {
-            throw new BallerinaException("Error occurred while getting input stream", e);
+            inputStream.close();
+        } catch (IOException e) {
+            throw new BallerinaException("Exception occurred when closing inputstream");
         }
-        return getBValues(result);
+        return VOID_RETURN;
     }
 }

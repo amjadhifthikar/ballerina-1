@@ -17,13 +17,9 @@
  */
 package org.ballerinalang.nativeimpl.lang.io;
 
-import org.apache.commons.vfs2.FileObject;
-import org.apache.commons.vfs2.FileSystemException;
-import org.apache.commons.vfs2.FileSystemManager;
-import org.apache.commons.vfs2.VFS;
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.model.types.TypeEnum;
-import org.ballerinalang.model.values.BFile;
+import org.ballerinalang.model.values.BBlob;
 import org.ballerinalang.model.values.BInputStream;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.natives.AbstractNativeFunction;
@@ -34,35 +30,47 @@ import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.ReturnType;
 import org.ballerinalang.util.exceptions.BallerinaException;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+
 /**
- * Gets the inputstream from file.
+ * Gets the blob from inputstream.
  */
 @BallerinaFunction(
         packageName = "ballerina.lang.io",
-        functionName = "getInputStream",
-        args = {@Argument(name = "file", type = TypeEnum.FILE)},
-        returnType = {@ReturnType(type = TypeEnum.INPUTSTREAM)},
+        functionName = "getBlob",
+        args = {@Argument(name = "is", type = TypeEnum.INPUTSTREAM)},
+        returnType = {@ReturnType(type = TypeEnum.BLOB)},
         isPublic = true
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
-        value = "Gets the inputstream from file") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "file",
-        value = "The BFile reference") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "is",
-        value = "The inputstream of file") })
-public class GetInputStream extends AbstractNativeFunction {
+        value = "Gets the blob from inputstream") })
+@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "is",
+        value = "The inputstream to get blob from") })
+@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "blob",
+        value = "The blob containing data of inputstream") })
+public class GetBytes extends AbstractNativeFunction {
 
     @Override
     public BValue[] execute(Context context) {
-        BInputStream result;
-        BFile file = (BFile) getArgument(context, 0);
+        BInputStream is = (BInputStream) getArgument(context, 0);
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        BBlob result;
         try {
-            FileSystemManager fsm = VFS.getManager();
-            FileObject fileObject = fsm.resolveFile(file.stringValue());
-            result = new BInputStream(fileObject.getContent().getInputStream());
-        }  catch (FileSystemException e) {
-            throw new BallerinaException("Error occurred while getting input stream", e);
+            int data;
+            while ((data = is.read()) != -1) {
+                bos.write(data);
+            }
+            result = new BBlob(bos.toByteArray());
+        } catch (IOException ioe) {
+            throw new BallerinaException("Error occurred when reading input stream", ioe);
+        } finally {
+            try {
+                bos.close();
+            } catch (IOException ignored) {
+            }
         }
         return getBValues(result);
     }
 }
+
