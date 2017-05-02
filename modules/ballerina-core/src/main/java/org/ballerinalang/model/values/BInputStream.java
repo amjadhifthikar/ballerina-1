@@ -6,7 +6,7 @@ import java.io.BufferedInputStream;
 import java.io.InputStream;
 
 /**
- * The {@code BFloat} represents a buffer of an input stream.
+ * The {@code BInputStream} represents a buffer of an input stream.
  * {@link BInputStream} will be useful for reading input streams.
  *
  * @since 0.9.0

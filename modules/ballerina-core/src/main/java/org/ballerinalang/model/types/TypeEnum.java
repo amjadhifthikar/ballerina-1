@@ -40,7 +40,8 @@ public enum TypeEnum {
     ANY("any"),
     FILE("file"),
     INPUTSTREAM("inputstream"),
-    READER("reader");
+    READER("reader"),
+    BLOB("blob");
 
     private String name;
 

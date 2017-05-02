@@ -53,6 +53,7 @@ public class BTypes {
     public static BType typeFile;
     public static BType typeInputStream;
     public static BType typeReader;
+    public static BType typeBlob;
 
     private static boolean initialized = false;
     private static Set<String> builtInTypeNames = new HashSet<>();
@@ -80,6 +81,7 @@ public class BTypes {
         globalScope.define(typeFile.getSymbolName(), typeFile);
         globalScope.define(typeInputStream.getSymbolName(), typeInputStream);
         globalScope.define(typeReader.getSymbolName(), typeReader);
+        globalScope.define(typeBlob.getSymbolName(), typeBlob);
 
         builtInTypeNames.add(TypeConstants.INT_TNAME);
         builtInTypeNames.add(TypeConstants.STRING_TNAME);
@@ -96,6 +98,7 @@ public class BTypes {
         builtInTypeNames.add(TypeConstants.FILE_TNAME);
         builtInTypeNames.add(TypeConstants.INPUTSTREAM_TNAME);
         builtInTypeNames.add(TypeConstants.READER_TNAME);
+        builtInTypeNames.add(TypeConstants.BLOB_TNAME);
 
         TypeLattice.loadImplicitCastLattice(globalScope);
         TypeLattice.loadExplicitCastLattice(globalScope);
@@ -116,9 +119,10 @@ public class BTypes {
         typeMap = new BMapType(TypeConstants.MAP_TNAME, typeAny, null, globalScope);
         typeConnector = new BConnectorType(TypeConstants.CONNECTOR_TNAME, null, globalScope);
         typeNull = new BNullType(TypeConstants.NULL_TNAME, null, globalScope);
-        typeFile = new BNullType(TypeConstants.FILE_TNAME, null, globalScope);
-        typeInputStream = new BNullType(TypeConstants.INPUTSTREAM_TNAME, null, globalScope);
-        typeReader = new BNullType(TypeConstants.READER_TNAME, null, globalScope);
+        typeFile = new BFileType(TypeConstants.FILE_TNAME, null, globalScope);
+        typeInputStream = new BInputStreamType(TypeConstants.INPUTSTREAM_TNAME, null, globalScope);
+        typeReader = new BReaderType(TypeConstants.READER_TNAME, null, globalScope);
+        typeBlob = new BBlobType(TypeConstants.BLOB_TNAME, null, globalScope);
         
         initialized = true;
     }

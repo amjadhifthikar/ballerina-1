@@ -61,7 +61,7 @@ public class FileServiceDispatcher implements ServiceDispatcher {
     public void serviceRegistered(Service service) {
         for (AnnotationAttachment annotation : service.getAnnotations()) {
             if (annotation.getName().equals(Constants.ANNOTATION_FILE_SOURCE) &&
-                annotation.getPkgName().equals("watch")) {
+                annotation.getPkgName().equals(Constants.PROTOCOL_FILE)) {
                 Map<String, String> elementsMap = annotation.getAttributeNameValuePairs().entrySet().stream().collect(
                         Collectors.toMap(Map.Entry::getKey, entry -> entry.getValue().getLiteralValue().stringValue()));
                 String serviceName = service.getSymbolName().getName();

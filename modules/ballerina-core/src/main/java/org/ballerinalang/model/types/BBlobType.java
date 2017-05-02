@@ -18,31 +18,28 @@
 package org.ballerinalang.model.types;
 
 import org.ballerinalang.model.SymbolScope;
-import org.ballerinalang.model.values.BFile;
+import org.ballerinalang.model.values.BBlob;
 import org.ballerinalang.model.values.BValue;
 
 /**
- * {@code BFileType} represents a File in Ballerina.
+ * {@code BBlob} represents a byte[].
  *
  * @since 0.9.0
  */
-public class BFileType extends BType {
-
-    protected BFileType(SymbolScope symbolScope) {
+public class BBlobType extends BType {
+    protected BBlobType(SymbolScope symbolScope) {
         super(symbolScope);
     }
 
-    protected BFileType(String typeName, String pkgPath, SymbolScope symbolScope) {
-        super(typeName, pkgPath, symbolScope, BFile.class);
+    protected BBlobType(String typeName, String pkgPath, SymbolScope symbolScope) {
+        super(typeName, pkgPath, symbolScope, BBlob.class);
     }
 
-    @Override
-    public <V extends BValue> V getZeroValue() {
+    @Override public <V extends BValue> V getZeroValue() {
         return null;
     }
 
-    @Override
-    public <V extends BValue> V getEmptyValue() {
+    @Override public <V extends BValue> V getEmptyValue() {
         return null;
     }
 }

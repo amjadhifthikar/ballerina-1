@@ -18,6 +18,7 @@
 package org.ballerinalang.model.types;
 
 import org.ballerinalang.model.SymbolScope;
+import org.ballerinalang.model.values.BReader;
 import org.ballerinalang.model.values.BValue;
 
 /**
@@ -31,9 +32,8 @@ public class BReaderType extends BType {
         super(symbolScope);
     }
 
-    protected BReaderType(String typeName, String pkgPath, SymbolScope symbolScope,
-                          Class<? extends BValue> valueClass) {
-        super(typeName, pkgPath, symbolScope, valueClass);
+    protected BReaderType(String typeName, String pkgPath, SymbolScope symbolScope) {
+        super(typeName, pkgPath, symbolScope, BReader.class);
     }
 
     @Override public <V extends BValue> V getZeroValue() {
