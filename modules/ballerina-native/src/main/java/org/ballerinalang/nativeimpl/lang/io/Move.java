@@ -28,7 +28,7 @@ import org.slf4j.LoggerFactory;
         isPublic = true
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
-        value = "This function acknowledges to the message sender that processing of the file has finished.") })
+        value = "This function moves a file from a given location to another") })
 @BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "target",
         value = "File/Directory that should be copied") })
 @BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "destination",

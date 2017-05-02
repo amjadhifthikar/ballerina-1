@@ -36,7 +36,7 @@ import java.nio.charset.Charset;
         isPublic = true
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
-        value = "This function acknowledges to the message sender that processing of the file has finished.") })
+        value = "This function writes an array to a given locationas a CSV file") })
 @BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "array",
         value = "String") })
 @BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "file",

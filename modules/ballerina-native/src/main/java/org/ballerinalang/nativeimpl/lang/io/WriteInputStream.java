@@ -33,7 +33,7 @@ import java.io.OutputStream;
         isPublic = true
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
-        value = "This function acknowledges to the message sender that processing of the file has finished.") })
+        value = "This function writes a file using the given input stream") })
 @BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "inputStream",
         value = "Input Stream") })
 @BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "file",
