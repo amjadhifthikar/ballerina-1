@@ -17,6 +17,7 @@
  */
 package org.ballerinalang.nativeimpl.lang.io;
 
+import com.opencsv.CSVReader;
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.model.types.TypeEnum;
 import org.ballerinalang.model.values.BArray;
@@ -57,68 +58,20 @@ public class ReadCSVRecord extends AbstractNativeFunction {
     @Override
     public BValue[] execute(Context context) {
         BArray<BString> result = new BArray<>(BString.class);
+        try {
         //todo allow custom seperators and quotes.
         BReader reader = (BReader) getArgument(context, 0);
-        String record;
-        try {
-            record = reader.readLine();
-        } catch (IOException e) {
-            throw new BallerinaException("Error while reading line for record", e);
-        }
-        if (record == null) {
-            if (log.isDebugEnabled()) {
-                log.debug("The end of the file have been reached");
-            }
-        } else {
-            char[] chars = record.toCharArray();
-            char quote = '"';
-            char separator = ',';
-            int count = 0;
-            String word = "";
-            int numWord = 0;
-            int length = chars.length;
+        CSVReader csvReader = new CSVReader(reader);
+
+            String[] myEntries = csvReader.readNext();
             int i = 0;
-            for (char c : chars) {
-                i++;
-                if (i == length) {
-                    word += c;
-                    result.add(numWord, new BString(word));
-                    break;
-                }
-                if (c == quote) {
-                    if (count == 1) {
-                        count = 2;
-                    } else if (count == 0) {
-                        count = 1;
-                    } else if (count == 3) {
-                        result.add(numWord++, new BString(word));
-                        word = "";
-                    }
-                    word += c;
-                } else if (c == separator) {
-                    if (count == 3) {
-                        count = 1;
-                        word += separator;
-                    }
-                    if (count == 0) {
-                        result.add(numWord++, new BString(word));
-                        word = "";
-                    } else if (count == 2) {
-                        count = 3;
-                    } else {
-                        word += c;
-                    }
-                } else {
-                    if (count == 2) {
-                        count = 1;
-                    } else if (count == 3) {
-                        count = 1;
-                        word += separator;
-                    }
-                    word += c;
-                }
+            for (String record : myEntries) {
+                result.add(i++, new BString(record));
             }
+        } catch (IOException e) {
+            throw new BallerinaException("Unsupported Encoding of Blob", e);
         }
+
         return getBValues(result);
     }
 }
