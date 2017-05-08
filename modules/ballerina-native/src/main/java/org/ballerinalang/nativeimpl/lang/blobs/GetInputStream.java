@@ -15,12 +15,12 @@
  * specific language governing permissions and limitations
  * under the License.
  */
-package org.ballerinalang.nativeimpl.lang.io;
+package org.ballerinalang.nativeimpl.lang.blobs;
 
 import org.ballerinalang.bre.Context;
 import org.ballerinalang.model.types.TypeEnum;
 import org.ballerinalang.model.values.BBlob;
-import org.ballerinalang.model.values.BString;
+import org.ballerinalang.model.values.BInputStream;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.natives.AbstractNativeFunction;
 import org.ballerinalang.natives.annotations.Argument;
@@ -28,40 +28,31 @@ import org.ballerinalang.natives.annotations.Attribute;
 import org.ballerinalang.natives.annotations.BallerinaAnnotation;
 import org.ballerinalang.natives.annotations.BallerinaFunction;
 import org.ballerinalang.natives.annotations.ReturnType;
-import org.ballerinalang.util.exceptions.BallerinaException;
 
-import java.io.UnsupportedEncodingException;
+import java.io.ByteArrayInputStream;
 
 /**
  * Convert JSON to String.
  */
 @BallerinaFunction(
-        packageName = "ballerina.lang.io",
-        functionName = "blobToString",
-        args = {@Argument(name = "b", type = TypeEnum.BLOB),
-                @Argument(name = "encoding", type = TypeEnum.STRING)},
-        returnType = {@ReturnType(type = TypeEnum.STRING)},
+        packageName = "ballerina.lang.blobs",
+        functionName = "getInputStream",
+        args = {@Argument(name = "b", type = TypeEnum.BLOB)},
+        returnType = {@ReturnType(type = TypeEnum.INPUTSTREAM)},
         isPublic = true
 )
 @BallerinaAnnotation(annotationName = "Description", attributes = {@Attribute(name = "value",
         value = "Converts JSON to a string") })
 @BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "b",
         value = "BLOB value to be converted") })
-@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "encoding",
-        value = "Encoding to used in blob conversion to string") })
-@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "string",
-        value = "String representation of the given BLOB") })
-public class BLOBToString extends AbstractNativeFunction {
+@BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "InputStream",
+        value = "InputStream representation of the given BLOB") })
+public class GetInputStream extends AbstractNativeFunction {
 
     public BValue[] execute(Context ctx) {
-        try {
-            BBlob msg = (BBlob) getArgument(ctx, 0);
-            BString encoding = (BString) getArgument(ctx, 1);
-            byte[] arr = msg.value();
-            String s = new String(arr, encoding.stringValue());
-            return getBValues(new BString(s));
-        } catch (UnsupportedEncodingException e) {
-            throw new BallerinaException("Unsupported Encoding of Blob", e);
-        }
+        BBlob msg = (BBlob) getArgument(ctx, 0);
+        byte[] arr = msg.value();
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(arr);
+        return getBValues(new BInputStream(byteArrayInputStream));
     }
 }
