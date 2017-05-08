@@ -67,6 +67,7 @@
         <dependency>
             <groupId>com.opencsv</groupId>
             <artifactId>opencsv</artifactId>
+            <version>${com.opencsv.version}</version>
         </dependency>
     </dependencies>
     

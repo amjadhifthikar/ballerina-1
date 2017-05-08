@@ -43,7 +43,8 @@ import java.io.IOException;
 @BallerinaFunction(
         packageName = "ballerina.lang.io",
         functionName = "readCSVRecord",
-        args = {@Argument(name = "reader", type = TypeEnum.READER)},
+        args = {@Argument(name = "reader", type = TypeEnum.READER),
+                @Argument(name = "separator", type = TypeEnum.STRING)},
         returnType = {@ReturnType(type = TypeEnum.ARRAY, elementType = TypeEnum.STRING)},
         isPublic = true
 )
@@ -51,6 +52,8 @@ import java.io.IOException;
         value = "Get the next record of a csv file as an array") })
 @BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "reader",
         value = "The reader instance to read record from") })
+@BallerinaAnnotation(annotationName = "Param", attributes = {@Attribute(name = "separator",
+        value = "The separator used to separate records") })
 @BallerinaAnnotation(annotationName = "Return", attributes = {@Attribute(name = "line",
         value = "The array containing the record") })
 public class ReadCSVRecord extends AbstractNativeFunction {
@@ -59,9 +62,16 @@ public class ReadCSVRecord extends AbstractNativeFunction {
     public BValue[] execute(Context context) {
         BArray<BString> result = new BArray<>(BString.class);
         try {
-        //todo allow custom seperators and quotes.
-        BReader reader = (BReader) getArgument(context, 0);
-        CSVReader csvReader = new CSVReader(reader);
+            BReader reader = (BReader) getArgument(context, 0);
+
+            BString separator = (BString) getArgument(context, 1);
+            char sep;
+            if (!separator.stringValue().equals("")) {
+                sep = separator.stringValue().charAt(0);
+            } else {
+                sep = ',';
+            }
+            CSVReader csvReader = new CSVReader(reader, sep);
 
             String[] myEntries = csvReader.readNext();
             int i = 0;

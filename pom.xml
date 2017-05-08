@@ -196,7 +196,7 @@
         <cobertura.version>2.7</cobertura.version>
         <commons-io.wso2.version>2.4.0.wso2v1</commons-io.wso2.version>
         <commons-io.version.range>[2.4.0, 2.5)</commons-io.version.range>
-
+        <com.opencsv.version>3.9</com.opencsv.version>
         <native.constructs.provider.package>org.ballerinalang.nativeimpl</native.constructs.provider.package>
         <native.constructs.provider.class>BallerinaNativeConstructsProvider</native.constructs.provider.class>
         <mvn.processor.plugin.version>2.2.4</mvn.processor.plugin.version>
