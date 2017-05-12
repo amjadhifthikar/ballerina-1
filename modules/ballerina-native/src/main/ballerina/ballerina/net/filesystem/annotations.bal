@@ -8,4 +8,10 @@ annotation FileSource attach service {
     string moveTimestampFormat;
     string moveAfterProcess;
     string createFolder;
+    string unzip;
+    string acknowledgementTimeOut;
+    string continueIfNotAcknowledged;
+    string locking;
+    string fileSortAttribute;
+    string fileSortAscending;
 }
