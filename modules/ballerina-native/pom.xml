@@ -64,6 +64,11 @@
             <artifactId>commons-io</artifactId>
             <version>${commons-io.wso2.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.opencsv</groupId>
+            <artifactId>opencsv</artifactId>
+            <version>${com.opencsv.version}</version>
+        </dependency>
     </dependencies>
     
     <build>

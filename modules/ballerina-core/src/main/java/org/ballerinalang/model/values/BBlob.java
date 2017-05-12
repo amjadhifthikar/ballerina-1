@@ -18,6 +18,7 @@
 package org.ballerinalang.model.values;
 
 import org.ballerinalang.model.types.BType;
+import org.ballerinalang.runtime.message.BallerinaMessageDataSource;
 
 /**
  * The {@code BBlob} represents a byte array.
@@ -25,7 +26,7 @@ import org.ballerinalang.model.types.BType;
  *
  * @since 0.9.0
  */
-public class BBlob implements BRefType<byte[]> {
+public class BBlob extends BallerinaMessageDataSource implements BRefType<byte[]> {
 
     private byte[] value;
 
@@ -43,5 +44,9 @@ public class BBlob implements BRefType<byte[]> {
 
     @Override public BType getType() {
         return null;
+    }
+
+    @Override public byte[] getDataObject() {
+        return value;
     }
 }
