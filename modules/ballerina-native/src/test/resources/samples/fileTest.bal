@@ -15,3 +15,7 @@ function testDelete(files:File target) {
 function testOpen(files:File source) {
     files:open(source);
 }
+
+function testWrite(blob content, files:File source) {
+    files:write(content, source);
+}

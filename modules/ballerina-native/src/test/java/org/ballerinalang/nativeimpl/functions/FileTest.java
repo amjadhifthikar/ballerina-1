@@ -20,10 +20,12 @@ package org.ballerinalang.nativeimpl.functions;
 import org.ballerinalang.model.BLangProgram;
 import org.ballerinalang.model.GlobalScope;
 import org.ballerinalang.model.StructDef;
+import org.ballerinalang.model.values.BBlob;
 import org.ballerinalang.model.values.BString;
 import org.ballerinalang.model.values.BStruct;
 import org.ballerinalang.model.values.BValue;
 import org.ballerinalang.nativeimpl.util.BTestUtils;
+import org.ballerinalang.util.exceptions.BallerinaException;
 import org.ballerinalang.util.program.BLangFunctions;
 import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
@@ -31,7 +33,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.io.BufferedInputStream;
+import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -150,6 +152,21 @@ public class FileTest {
 
     }
 
+    @Test
+    public void testWrite() throws IOException {
+
+        String targetPath = "temp/text.txt";
+        File targetFile = new File(targetPath);
+            byte[] content = "Sample Text".getBytes();
+            BBlob byteContent = new BBlob(content);
+            BValue[] source = { new BString(targetPath) };
+            BStruct targetStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
+            BValue[] args = {byteContent, targetStruct};
+
+            BLangFunctions.invoke(bLangProgram, "testWrite", args);
+        Assert.assertTrue(targetFile.exists(), "File not created");
+            Assert.assertEquals(byteContent.blobValue(), getBytesFromFile(targetFile), "Written wrong content");
+    }
     private void deleteDir(File dir) {
 
         String[] entries = dir.list();
@@ -165,5 +182,41 @@ public class FileTest {
         dir.delete();
     }
 
+    private byte[] getBytesFromFile(File file) throws IOException {
+
+        long length = file.length();
+        if (length > Integer.MAX_VALUE) {
+            throw new IOException("File is too large!");
+        }
+
+        byte[] bytes = new byte[(int)length];
+        int offset = 0;
+        int numRead;
+        FileInputStream is = new FileInputStream(file);
+
+        try {
+            while (offset < bytes.length
+                   && (numRead=is.read(bytes, offset, bytes.length-offset)) >= 0) {
+                offset += numRead;
+            }
+        } finally {
+            closeQuietly(is);
+        }
+
+        if (offset < bytes.length) {
+            throw new IOException("Could not completely read file "+file.getName());
+        }
+        return bytes;
+    }
+
+    private void closeQuietly(Closeable resource) {
+        try {
+            if (resource != null) {
+                resource.close();
+            }
+        } catch (Exception e) {
+            throw new BallerinaException("Exception during Resource.close()", e);
+        }
+    }
 
 }
