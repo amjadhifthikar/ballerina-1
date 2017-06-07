@@ -19,3 +19,11 @@ function testOpen(files:File source) {
 function testWrite(blob content, files:File source) {
     files:write(content, source);
 }
+
+function testRead(files:File source, int bytes)(blob, int) {
+    return files:read(source, bytes);
+}
+
+function testClose(files:File source) {
+    files:close(source);
+}
