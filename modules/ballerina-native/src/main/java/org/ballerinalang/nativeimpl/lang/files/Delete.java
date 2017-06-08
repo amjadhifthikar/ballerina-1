@@ -43,7 +43,7 @@ import java.io.File;
 @BallerinaAnnotation(annotationName = "Description", attributes = { @Attribute(name = "value",
         value = "This function deletes a file from a given location") })
 @BallerinaAnnotation(annotationName = "Param", attributes = { @Attribute(name = "target",
-        value = "File/Directory that should be copied") })
+        value = "File that should be deleted") })
 public class Delete extends AbstractNativeFunction {
 
     @Override public BValue[] execute(Context context) {
@@ -53,9 +53,27 @@ public class Delete extends AbstractNativeFunction {
         if (!targetFile.exists()) {
             throw new BallerinaException("File intended to delete does not exist");
         }
-        if (!targetFile.delete()) {
+        if (!delete(targetFile)) {
             throw new BallerinaException("Error while deleting file");
         }
         return VOID_RETURN;
     }
+
+    private boolean delete(File targetFile) {
+
+        String[] entries = targetFile.list();
+        if (entries != null && entries.length != 0) {
+            for (String s : entries) {
+                File currentFile = new File(targetFile.getPath(), s);
+                if (currentFile.isDirectory()) {
+                    delete(currentFile);
+                }
+                if (!currentFile.delete()) {
+                    return false;
+                }
+            }
+        }
+        return targetFile.delete();
+    }
+
 }

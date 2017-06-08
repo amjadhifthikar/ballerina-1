@@ -35,6 +35,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.Closeable;
 import java.io.File;
 import java.io.FileInputStream;
@@ -43,7 +44,7 @@ import java.io.IOException;
 import java.io.OutputStream;
 
 /**
- * Test cases for ballerina.model.arrays.
+ * Test cases for ballerina.model.file.
  */
 public class FileTest {
 
@@ -80,21 +81,21 @@ public class FileTest {
         String destPath = "temp/duplicate.txt";
         File sourceFile = new File(sourcePath);
         File destFile = new File(destPath);
-            if (sourceFile.createNewFile()) {
+        if (sourceFile.createNewFile()) {
 
-                BValue[] source = { new BString(sourcePath) };
-                BValue[] dest = { new BString(destPath) };
-                BStruct sourceStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
-                BStruct destStruct = new BStruct(new StructDef(GlobalScope.getInstance()), dest);
-                BValue[] args = { sourceStruct, destStruct };
+            BValue[] source = { new BString(sourcePath) };
+            BValue[] dest = { new BString(destPath) };
+            BStruct sourceStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
+            BStruct destStruct = new BStruct(new StructDef(GlobalScope.getInstance()), dest);
+            BValue[] args = { sourceStruct, destStruct };
 
-                BLangFunctions.invoke(bLangProgram, "testCopy", args);
-                Assert.assertTrue(sourceFile.exists(), "Source file does not exist");
-                Assert.assertTrue(destFile.exists(), "File wasn't copied");
-            } else {
-                Assert.fail("Error in file creation.");
-            }
+            BLangFunctions.invoke(bLangProgram, "testCopy", args);
+            Assert.assertTrue(sourceFile.exists(), "Source file does not exist");
+            Assert.assertTrue(destFile.exists(), "File wasn't copied");
+        } else {
+            Assert.fail("Error in file creation.");
         }
+    }
 
     @Test
     public void testMove() throws IOException {
@@ -103,20 +104,20 @@ public class FileTest {
         String destPath = "temp/test/original.txt";
         File sourceFile = new File(sourcePath);
         File destFile = new File(destPath);
-            if (sourceFile.createNewFile()) {
+        if (sourceFile.createNewFile()) {
 
-                BValue[] source = { new BString(sourcePath) };
-                BValue[] dest = { new BString(destPath) };
-                BStruct sourceStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
-                BStruct destStruct = new BStruct(new StructDef(GlobalScope.getInstance()), dest);
-                BValue[] args = { sourceStruct, destStruct };
+            BValue[] source = { new BString(sourcePath) };
+            BValue[] dest = { new BString(destPath) };
+            BStruct sourceStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
+            BStruct destStruct = new BStruct(new StructDef(GlobalScope.getInstance()), dest);
+            BValue[] args = { sourceStruct, destStruct };
 
-                BLangFunctions.invoke(bLangProgram, "testMove", args);
-                Assert.assertFalse(sourceFile.exists(), "Source file exists");
-                Assert.assertTrue(destFile.exists(), "File wasn't moved");
-            } else {
-                Assert.fail("Error in file creation.");
-            }
+            BLangFunctions.invoke(bLangProgram, "testMove", args);
+            Assert.assertFalse(sourceFile.exists(), "Source file exists");
+            Assert.assertTrue(destFile.exists(), "File wasn't moved");
+        } else {
+            Assert.fail("Error in file creation.");
+        }
     }
 
     @Test
@@ -124,17 +125,17 @@ public class FileTest {
 
         String targetPath = "temp/original.txt";
         File targetFile = new File(targetPath);
-            if (targetFile.createNewFile()) {
+        if (targetFile.createNewFile()) {
 
-                BValue[] source = { new BString(targetPath) };
-                BStruct targetStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
-                BValue[] args = {targetStruct};
+            BValue[] source = { new BString(targetPath) };
+            BStruct targetStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
+            BValue[] args = { targetStruct };
 
-                BLangFunctions.invoke(bLangProgram, "testDelete", args);
-                Assert.assertFalse(targetFile.exists(), "Target file exists");
-            } else {
-                Assert.fail("Error in file creation.");
-            }
+            BLangFunctions.invoke(bLangProgram, "testDelete", args);
+            Assert.assertFalse(targetFile.exists(), "Target file exists");
+        } else {
+            Assert.fail("Error in file creation.");
+        }
     }
 
     @Test
@@ -142,21 +143,55 @@ public class FileTest {
 
         String sourcePath = "temp/original.txt";
         File sourceFile = new File(sourcePath);
-            if (sourceFile.createNewFile()) {
+        if (sourceFile.createNewFile()) {
 
-                BValue[] source = { new BString(sourcePath) };
-                BStruct sourceStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
-                BValue[] args = {sourceStruct};
+            BValue[] source = { new BString(sourcePath) };
+            BStruct sourceStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
+            BValue[] args = { sourceStruct , new BString("rw")};
 
-                BLangFunctions.invoke(bLangProgram, "testOpen", args);
-                Assert.assertNotNull(sourceStruct.getNativeData("stream"), "Input Stream not found");
-            } else {
-                Assert.fail("Error in file creation.");
-            }
+            BLangFunctions.invoke(bLangProgram, "testOpen", args);
+            Assert.assertNotNull(sourceStruct.getNativeData("inStream"), "Input Stream not found");
+            Assert.assertNotNull(sourceStruct.getNativeData("outStream"), "Output Stream not found");
+
+            sourceStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
+            args[0] = sourceStruct;
+            args[1] = new BString("ra");
+
+            BLangFunctions.invoke(bLangProgram, "testOpen", args);
+            Assert.assertNotNull(sourceStruct.getNativeData("inStream"), "Input Stream not found");
+            Assert.assertNotNull(sourceStruct.getNativeData("outStream"), "Output Stream not found");
+
+            sourceStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
+            args[0] = sourceStruct;
+            args[1] = new BString("r");
+
+            BLangFunctions.invoke(bLangProgram, "testOpen", args);
+            Assert.assertNotNull(sourceStruct.getNativeData("inStream"), "Input Stream not found");
+            Assert.assertNull(sourceStruct.getNativeData("outStream"), "Output Stream found in read mode");
+
+            sourceStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
+            args[0] = sourceStruct;
+            args[1] = new BString("w");
+
+            BLangFunctions.invoke(bLangProgram, "testOpen", args);
+            Assert.assertNull(sourceStruct.getNativeData("inStream"), "Input Stream not found in write mode");
+            Assert.assertNotNull(sourceStruct.getNativeData("outStream"), "Output Stream not found");
+
+            sourceStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
+            args[0] = sourceStruct;
+            args[1] = new BString("a");
+
+            BLangFunctions.invoke(bLangProgram, "testOpen", args);
+            Assert.assertNull(sourceStruct.getNativeData("inStream"), "Input Stream not found in append mode");
+            Assert.assertNotNull(sourceStruct.getNativeData("outStream"), "Output Stream not found");
+
+        } else {
+            Assert.fail("Error in file creation.");
+        }
 
     }
 
-    @Test
+    @Test(expectedExceptions = IOException.class)
     public void testClose() throws IOException {
 
         String sourcePath = "temp/original.txt";
@@ -165,16 +200,17 @@ public class FileTest {
             BValue[] source = { new BString(sourcePath) };
             BStruct sourceStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
             BufferedInputStream inputStream = new BufferedInputStream(new FileInputStream(sourceFile));
-            sourceStruct.addNativeData("stream", inputStream);
+            sourceStruct.addNativeData("inStream", inputStream);
+            BufferedOutputStream outputStream = new BufferedOutputStream(new FileOutputStream(sourceFile));
+            sourceStruct.addNativeData("outStream", outputStream);
             BValue[] args = {sourceStruct};
 
             BLangFunctions.invoke(bLangProgram, "testClose", args);
-            inputStream = (BufferedInputStream) sourceStruct.getNativeData("stream");
-            try {
-                inputStream.read();
-            } catch (IOException e) {
-                Assert.assertEquals(e.getMessage(), "Stream closed");
-            }
+            inputStream = (BufferedInputStream) sourceStruct.getNativeData("inStream");
+            outputStream = (BufferedOutputStream) sourceStruct.getNativeData("outStream");
+            inputStream.read();
+            outputStream.write(1);
+
         } else {
             Assert.fail("Error in file creation.");
         }
@@ -186,15 +222,15 @@ public class FileTest {
 
         String targetPath = "temp/text.txt";
         File targetFile = new File(targetPath);
-            byte[] content = "Sample Text".getBytes();
-            BBlob byteContent = new BBlob(content);
-            BValue[] source = { new BString(targetPath) };
-            BStruct targetStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
-            BValue[] args = {byteContent, targetStruct};
+        byte[] content = "Sample Text".getBytes();
+        BBlob byteContent = new BBlob(content);
+        BValue[] source = { new BString(targetPath) };
+        BStruct targetStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
+        BValue[] args = { byteContent, targetStruct };
 
-            BLangFunctions.invoke(bLangProgram, "testWrite", args);
+        BLangFunctions.invoke(bLangProgram, "testWrite", args);
         Assert.assertTrue(targetFile.exists(), "File not created");
-            Assert.assertEquals(byteContent.blobValue(), getBytesFromFile(targetFile), "Written wrong content");
+        Assert.assertEquals(byteContent.blobValue(), getBytesFromFile(targetFile), "Written wrong content");
     }
 
     @Test
@@ -210,7 +246,7 @@ public class FileTest {
         BStruct targetStruct = new BStruct(new StructDef(GlobalScope.getInstance()), source);
 
         BufferedInputStream is = new BufferedInputStream(new FileInputStream(targetFile));
-        targetStruct.addNativeData("stream", is);
+        targetStruct.addNativeData("inStream", is);
         BValue[] args = { targetStruct, new BInteger(11) };
 
         BValue[] results = BLangFunctions.invoke(bLangProgram, "testRead", args);
@@ -220,7 +256,7 @@ public class FileTest {
     private void deleteDir(File dir) {
 
         String[] entries = dir.list();
-        if (entries.length != 0) {
+        if (entries != null && entries.length != 0) {
             for (String s : entries) {
                 File currentFile = new File(dir.getPath(), s);
                 if (currentFile.isDirectory()) {

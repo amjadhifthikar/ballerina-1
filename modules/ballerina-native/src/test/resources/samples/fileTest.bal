@@ -12,11 +12,12 @@ function testDelete(files:File target) {
     files:delete(target);
 }
 
-function testOpen(files:File source) {
-    files:open(source);
+function testOpen(files:File source, string accessMode) {
+    files:open(source, accessMode);
 }
 
 function testWrite(blob content, files:File source) {
+    files:open(source, "w");
     files:write(content, source);
 }
 
