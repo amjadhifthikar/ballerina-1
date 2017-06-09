@@ -27,6 +27,7 @@ import org.ballerinalang.model.types.BTypes;
 public class BBlob extends BValueType implements BRefType<byte[]> {
 
     private byte[] value;
+    private int contentLength = 0;
 
     public BBlob(byte[] value) {
         this.value = value;
@@ -69,5 +70,13 @@ public class BBlob extends BValueType implements BRefType<byte[]> {
 
     @Override public byte[] value() {
         return value;
+    }
+
+    public int getContentLength() {
+        return contentLength;
+    }
+
+    public void setContentLength(int contentLength) {
+        this.contentLength = contentLength;
     }
 }

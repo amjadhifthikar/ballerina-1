@@ -61,7 +61,11 @@ public class Write extends AbstractNativeFunction {
             if (outputStream == null) {
                 throw new BallerinaException("The file isn't opened in write or append mode");
             }
-            outputStream.write(content.blobValue());
+            if (content.getContentLength() != 0) {
+                outputStream.write(content.blobValue(), 0, content.getContentLength());
+            } else {
+                outputStream.write(content.blobValue());
+            }
             outputStream.flush();
 
         } catch (IOException e) {

@@ -75,6 +75,8 @@ public class Read extends AbstractNativeFunction {
         } catch (IOException e) {
             throw new BallerinaException("Error occurred while reading stream");
         }
-        return getBValues(new BBlob(data), new BInteger(nRead));
+        BBlob blob = new BBlob(data);
+        blob.setContentLength(nRead);
+        return getBValues(blob, new BInteger(nRead));
     }
 }
